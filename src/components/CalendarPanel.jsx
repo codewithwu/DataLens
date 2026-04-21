@@ -75,6 +75,24 @@ export function CalendarPanel() {
     }
   }
 
+  function handleSelectLast7Days() {
+    if (!dateRange) return;
+    const end = new Date(dateRange.max);
+    const start = new Date(end);
+    start.setDate(start.getDate() - 6);
+    const dates = generateDateRange(formatDate(start), formatDate(end));
+    handleDateSelect(dates);
+  }
+
+  function handleSelectLast30Days() {
+    if (!dateRange) return;
+    const end = new Date(dateRange.max);
+    const start = new Date(end);
+    start.setDate(start.getDate() - 29);
+    const dates = generateDateRange(formatDate(start), formatDate(end));
+    handleDateSelect(dates);
+  }
+
   function tileDisabled({ date }) {
     if (!dateRange) return true;
     const d = formatDate(date);
@@ -128,12 +146,26 @@ export function CalendarPanel() {
               <span key={d} className="date-tag">{d}</span>
             ))}
           </div>
-          <button
-            className="clear-btn"
-            onClick={() => handleDateSelect([])}
-          >
-            清除选择
-          </button>
+          <div className="quick-buttons">
+            <button
+              className="quick-btn"
+              onClick={handleSelectLast7Days}
+            >
+              最近7天
+            </button>
+            <button
+              className="quick-btn"
+              onClick={handleSelectLast30Days}
+            >
+              最近30天
+            </button>
+            <button
+              className="clear-btn"
+              onClick={() => handleDateSelect([])}
+            >
+              清除选择
+            </button>
+          </div>
         </div>
       )}
     </div>
