@@ -32,6 +32,7 @@ export function FileUpload() {
 
   return (
     <div className="file-upload">
+      <h3>数据上传</h3>
       <div
         className={`upload-zone ${isDragging ? 'dragging' : ''}`}
         onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); setIsDragging(true); }}
@@ -50,6 +51,7 @@ export function FileUpload() {
           <p>正在解析...</p>
         ) : (
           <>
+            <span className="icon">📁</span>
             <p>拖拽 CSV 文件到此处，或点击上传</p>
             <p className="hint">支持 .csv 格式</p>
           </>
@@ -60,10 +62,10 @@ export function FileUpload() {
 
       {rawData.length > 0 && (
         <div className="data-summary">
-          <p>已加载 {rawData.length} 条记录</p>
+          <p>已加载 <span className="stat-value">{rawData.length.toLocaleString()}</span> 条记录</p>
           {dateRange && (
             <p>
-              日期范围: {dateRange.min.toLocaleDateString()} - {dateRange.max.toLocaleDateString()}
+              日期范围: {dateRange.min.toLocaleDateString()} ~ {dateRange.max.toLocaleDateString()}
             </p>
           )}
         </div>

@@ -1,3 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+:root {
+  --bg-primary: #0a0e17;
+  --bg-card: #111827;
+  --bg-card-hover: #1a2332;
+  --border: #1e293b;
+  --border-glow: rgba(0, 212, 255, 0.3);
+  --primary: #00d4ff;
+  --primary-dim: rgba(0, 212, 255, 0.15);
+  --secondary: #6366f1;
+  --accent: #10b981;
+  --danger: #ff6b6b;
+  --warning: #fbbf24;
+  --text: #e2e8f0;
+  --text-muted: #64748b;
+  --text-dim: #94a3b8;
+  --glow-primary: 0 0 20px rgba(0, 212, 255, 0.4);
+  --glow-secondary: 0 0 20px rgba(99, 102, 241, 0.4);
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -5,39 +28,88 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: #f5f5f5;
-  color: #333;
+  font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text);
+  min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse at 20% 0%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(0, 212, 255, 0.06) 0%, transparent 50%);
 }
 
 .app {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
+/* Header */
 .header {
-  background: #007bff;
-  color: white;
-  padding: 24px;
+  background: linear-gradient(180deg, rgba(17, 24, 39, 0.95) 0%, rgba(17, 24, 39, 0.8) 100%);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 28px 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary), var(--primary));
+  background-size: 200% 100%;
+  animation: gradientFlow 3s ease infinite;
+}
+
+@keyframes gradientFlow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  opacity: 0.5;
 }
 
 .header h1 {
-  font-size: 24px;
-  font-weight: 600;
+  font-family: 'Exo 2', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, var(--text) 0%, var(--primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .header p {
-  opacity: 0.8;
-  margin-top: 4px;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 6px;
+  letter-spacing: 0.5px;
 }
 
+/* Main Layout */
 .main {
   display: flex;
-  padding: 24px;
-  gap: 24px;
+  padding: 28px 32px;
+  gap: 28px;
+  flex: 1;
 }
 
 .sidebar {
-  width: 320px;
+  width: 340px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -49,71 +121,445 @@ body {
   min-width: 0;
 }
 
+/* Card Base */
+.file-upload,
+.calendar-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.file-upload:hover,
+.calendar-panel:hover {
+  border-color: rgba(0, 212, 255, 0.2);
+}
+
+/* Card Glow Effect */
+.file-upload::before,
+.calendar-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.file-upload:hover::before,
+.calendar-panel:hover::before {
+  opacity: 0.6;
+}
+
+/* File Upload */
 .file-upload {
-  background: white;
-  border-radius: 8px;
-  padding: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 0;
+}
+
+.file-upload h3 {
+  font-family: 'Exo 2', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  padding: 20px 20px 0;
 }
 
 .upload-zone {
-  border: 2px dashed #ddd;
-  border-radius: 8px;
-  padding: 40px 20px;
+  margin: 16px 20px 20px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  padding: 48px 24px;
   text-align: center;
   cursor: pointer;
-  transition: border-color 0.2s;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.upload-zone::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--primary-dim) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .upload-zone:hover {
-  border-color: #007bff;
+  border-color: var(--primary);
+  background: rgba(0, 212, 255, 0.05);
+}
+
+.upload-zone:hover::before {
+  opacity: 1;
 }
 
 .upload-zone.dragging {
-  border-color: #007bff;
-  background: #f0f7ff;
+  border-color: var(--primary);
+  background: rgba(0, 212, 255, 0.1);
+  box-shadow: var(--glow-primary);
 }
 
 .upload-zone p {
-  margin: 0;
+  position: relative;
+  z-index: 1;
+  font-size: 14px;
+  color: var(--text-dim);
 }
 
 .upload-zone .hint {
-  color: #999;
   font-size: 12px;
+  color: var(--text-muted);
   margin-top: 8px;
 }
 
-.error {
-  margin-top: 12px;
-  padding: 12px;
-  background: #ffe6e6;
-  color: #c00;
-  border-radius: 4px;
+.upload-zone .icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+  display: block;
 }
 
+/* Data Summary */
 .data-summary {
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid #eee;
+  margin: 0 20px 20px;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
 }
 
 .data-summary p {
-  margin: 4px 0;
+  font-size: 13px;
+  color: var(--text-dim);
+  margin: 6px 0;
 }
 
+.data-summary .stat-value {
+  color: var(--primary);
+  font-weight: 600;
+  font-family: 'Exo 2', monospace;
+}
+
+/* Error */
+.error {
+  margin: 0 20px 20px;
+  padding: 12px 16px;
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  border-radius: var(--radius-sm);
+  color: var(--danger);
+  font-size: 13px;
+}
+
+/* Calendar Panel */
 .calendar-panel {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.calendar-panel h3 {
+  font-family: 'Exo 2', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.calendar-panel .hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
 }
 
 .calendar-panel .react-calendar {
   width: 100%;
   border: none;
+  background: transparent;
+  font-family: 'IBM Plex Sans', sans-serif;
 }
 
-.calendar-panel .react-calendar__tile--selected {
-  background: #007bff;
+.calendar-panel .react-calendar__navigation {
+  margin-bottom: 12px;
+}
+
+.calendar-panel .react-calendar__navigation button {
+  color: var(--text);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-family: 'Exo 2', sans-serif;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.calendar-panel .react-calendar__navigation button:hover {
+  background: var(--primary-dim);
+  border-color: var(--primary);
+}
+
+.calendar-panel .react-calendar__navigation button:disabled {
+  opacity: 0.3;
+}
+
+.calendar-panel .react-calendar__month-view__weekdays {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.calendar-panel .react-calendar__tile {
+  color: var(--text-dim);
+  background: transparent;
+  border-radius: var(--radius-sm);
+  padding: 10px 6px;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.calendar-panel .react-calendar__tile:hover:not(:disabled) {
+  background: var(--primary-dim);
+  color: var(--primary);
+}
+
+.calendar-panel .react-calendar__tile:disabled {
+  color: var(--text-muted);
+  opacity: 0.3;
+}
+
+.calendar-panel .react-calendar__tile--now {
+  background: rgba(99, 102, 241, 0.2);
+  color: var(--secondary);
+}
+
+.calendar-panel .react-calendar__tile--selected,
+.calendar-panel .react-calendar__tile.selected {
+  background: var(--primary);
+  color: var(--bg-primary);
+  font-weight: 600;
+  box-shadow: var(--glow-primary);
+}
+
+.calendar-panel .react-calendar__tile.in-range {
+  background: var(--primary-dim);
+  color: var(--primary);
+}
+
+/* Quick Buttons */
+.quick-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.quick-btn {
+  flex: 1;
+  min-width: 80px;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, var(--secondary) 0%, #4f46e5 100%);
   color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Exo 2', sans-serif;
+  letter-spacing: 0.5px;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.quick-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.quick-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--glow-secondary);
+}
+
+.quick-btn:hover::before {
+  left: 100%;
+}
+
+.clear-btn {
+  flex: 1;
+  min-width: 80px;
+  padding: 10px 14px;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.clear-btn:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: rgba(255, 107, 107, 0.1);
+}
+
+/* Selected Info */
+.selected-info {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.selected-info p {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.selected-info .count {
+  color: var(--primary);
+  font-weight: 600;
+  font-family: 'Exo 2', monospace;
+}
+
+.selected-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.date-tag {
+  background: var(--primary-dim);
+  color: var(--primary);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+/* No Data State */
+.no-data {
+  color: var(--text-muted);
+  text-align: center;
+  padding: 40px;
+  font-size: 14px;
+}
+
+/* Chart Panel */
+.chart-panel {
+  padding: 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  min-height: 400px;
+}
+
+.chart-panel.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  color: var(--text-muted);
+  font-size: 14px;
+  position: relative;
+}
+
+.chart-panel.empty::before {
+  content: '📊';
+  font-size: 48px;
+  display: block;
+  margin-bottom: 16px;
+  opacity: 0.3;
+}
+
+.chart-legend {
+  display: flex;
+  gap: 24px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.legend-peak {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.legend-valley {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* Chart.js customization via canvas container */
+.chart-panel canvas {
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.file-upload,
+.calendar-panel,
+.chart-panel {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+.calendar-panel { animation-delay: 0.1s; }
+.chart-panel { animation-delay: 0.2s; }
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .main {
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .sidebar {
+    width: 100%;
+  }
 }

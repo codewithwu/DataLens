@@ -10,7 +10,7 @@ function App() {
       <div className="app">
         <header className="header">
           <h1>DataLens</h1>
-          <p>消费数据可视化分析</p>
+          <p>MiniMax Token 账单可视化分析工具</p>
         </header>
         <main className="main">
           <aside className="sidebar">
