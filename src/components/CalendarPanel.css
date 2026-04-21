@@ -32,3 +32,9 @@
   border-radius: 4px;
   font-size: 12px;
 }
+
+.react-calendar__tile--selected,
+.react-calendar__tile.selected {
+  background: #007bff;
+  color: white;
+}
