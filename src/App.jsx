@@ -1,10 +1,18 @@
+import { useState } from 'react';
 import { DataProvider } from './context/DataContext';
 import { FileUpload } from './components/FileUpload';
 import { CalendarPanel } from './components/CalendarPanel';
 import { ChartPanel } from './components/ChartPanel';
+import { LandingPage } from './components/LandingPage';
 import './App.css';
 
 function App() {
+  const [showMain, setShowMain] = useState(false);
+
+  if (!showMain) {
+    return <LandingPage onEnter={() => setShowMain(true)} />;
+  }
+
   return (
     <DataProvider>
       <div className="app">
