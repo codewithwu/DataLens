@@ -48,12 +48,66 @@ function SingleDayChart({ date, data }) {
   const labels = chartData.map(d => `${d.hour}:00`);
   const values = chartData.map(d => d.value);
 
+  // Find peak and valley
+  const maxValue = Math.max(...values);
+  const minValue = Math.min(...values);
+  const peakIndex = values.indexOf(maxValue);
+  const valleyIndex = values.indexOf(minValue);
+  const hasPeak = maxValue > 0;
+  const hasValley = minValue > 0 && minValue !== maxValue;
+
   const options = {
     responsive: true,
     plugins: {
       title: {
         display: true,
         text: `${date} 每小时消费趋势`
+      },
+      annotation: {
+        annotations: {
+          ...(hasPeak && {
+            peakLine: {
+              type: 'line',
+              xMin: peakIndex,
+              xMax: peakIndex,
+              borderColor: 'rgb(255, 99, 132)',
+              borderWidth: 2,
+              label: {
+                display: true,
+                content: `峰值: ${maxValue.toLocaleString()}`,
+                position: 'start',
+                backgroundColor: 'rgb(255, 99, 132)',
+                color: 'white'
+              }
+            }
+          }),
+          ...(hasValley && {
+            valleyLine: {
+              type: 'line',
+              xMin: valleyIndex,
+              xMax: valleyIndex,
+              borderColor: 'rgb(54, 162, 235)',
+              borderWidth: 2,
+              label: {
+                display: true,
+                content: `谷值: ${minValue.toLocaleString()}`,
+                position: 'start',
+                backgroundColor: 'rgb(54, 162, 235)',
+                color: 'white'
+              }
+            }
+          })
+        }
+      },
+      tooltip: {
+        callbacks: {
+          afterLabel: (context) => {
+            const idx = context.dataIndex;
+            if (idx === peakIndex && hasPeak) return '📈 峰值';
+            if (idx === valleyIndex && hasValley) return '📉 谷值';
+            return '';
+          }
+        }
       }
     },
     scales: {
@@ -76,11 +130,26 @@ function SingleDayChart({ date, data }) {
             label: '总消费数',
             data: values,
             borderColor: 'rgb(75, 192, 192)',
-            tension: 0.1
+            tension: 0.1,
+            pointBackgroundColor: chartData.map((_, i) => {
+              if (i === peakIndex && hasPeak) return 'rgb(255, 99, 132)';
+              if (i === valleyIndex && hasValley) return 'rgb(54, 162, 235)';
+              return 'rgb(75, 192, 192)';
+            }),
+            pointRadius: chartData.map((_, i) => {
+              if (i === peakIndex || i === valleyIndex) return 6;
+              return 3;
+            })
           }]
         }}
         options={options}
       />
+      {(hasPeak || hasValley) && (
+        <div className="chart-legend">
+          {hasPeak && <span className="legend-peak">📈 峰值: {maxValue.toLocaleString()}</span>}
+          {hasValley && <span className="legend-valley">📉 谷值: {minValue.toLocaleString()}</span>}
+        </div>
+      )}
     </div>
   );
 }
