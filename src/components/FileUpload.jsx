@@ -4,21 +4,29 @@ import { useData } from '../context/DataContext';
 export function FileUpload() {
   const { handleFileUpload, isLoading, error, rawData, dateRange } = useData();
   const [isDragging, setIsDragging] = useState(false);
+  const [localError, setLocalError] = useState('');
   const inputRef = useRef(null);
 
   function handleDrop(e) {
     e.preventDefault();
+    e.stopPropagation();
     setIsDragging(false);
     const file = e.dataTransfer.files[0];
     if (file && file.name.endsWith('.csv')) {
+      setLocalError('');
       handleFileUpload(file);
+    } else {
+      setLocalError('请上传 CSV 格式的文件');
     }
   }
 
   function handleChange(e) {
     const file = e.target.files[0];
-    if (file) {
+    if (file && file.name.endsWith('.csv')) {
+      setLocalError('');
       handleFileUpload(file);
+    } else {
+      setLocalError('请上传 CSV 格式的文件');
     }
   }
 
@@ -26,7 +34,7 @@ export function FileUpload() {
     <div className="file-upload">
       <div
         className={`upload-zone ${isDragging ? 'dragging' : ''}`}
-        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+        onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); setIsDragging(true); }}
         onDragLeave={() => setIsDragging(false)}
         onDrop={handleDrop}
         onClick={() => inputRef.current?.click()}
@@ -48,7 +56,7 @@ export function FileUpload() {
         )}
       </div>
 
-      {error && <div className="error">{error}</div>}
+      {(error || localError) && <div className="error">{error || localError}</div>}
 
       {rawData.length > 0 && (
         <div className="data-summary">
