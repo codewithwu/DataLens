@@ -16,7 +16,7 @@ export function aggregateByHour(data) {
     const [datePart, hourPart] = timeStr.split(' ');
     const hour = hourPart.split(':')[0]; // "22"
 
-    const key = `${datePart}-${hour}`; // "2026-04-17-22"
+    const key = `${datePart}-${hour.toString().padStart(2, '0')}`;
 
     const existing = map.get(key) || 0;
     map.set(key, existing + totalConsumption);

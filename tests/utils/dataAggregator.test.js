@@ -18,6 +18,18 @@ describe('dataAggregator', () => {
       expect(result.get('2026-04-17-21')).toBe(150);
     });
 
+    it('uses zero-padded hour format for single-digit hours', () => {
+      const data = [
+        { '消费时间': '2026-04-17 09:00-10:00', '总消费数': '100' },
+        { '消费时间': '2026-04-17 05:00-06:00', '总消费数': '50' },
+        { '消费时间': '2026-04-17 00:00-01:00', '总消费数': '25' }
+      ];
+      const result = aggregateByHour(data);
+      expect(result.get('2026-04-17-09')).toBe(100);
+      expect(result.get('2026-04-17-05')).toBe(50);
+      expect(result.get('2026-04-17-00')).toBe(25);
+    });
+
     it('handles empty data', () => {
       const result = aggregateByHour([]);
       expect(result.size).toBe(0);
