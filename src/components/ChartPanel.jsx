@@ -158,6 +158,7 @@ function MultiDayChart({ dates, data }) {
   const chartData = toMultiDayChartData(data, dates);
   const labels = chartData.map(d => d.date);
   const values = chartData.map(d => d.total);
+  const total = values.reduce((sum, v) => sum + v, 0);
 
   const options = {
     responsive: true,
@@ -179,18 +180,21 @@ function MultiDayChart({ dates, data }) {
   };
 
   return (
-    <div className="chart-panel">
-      <Bar
-        data={{
-          labels,
-          datasets: [{
-            label: '总消费数',
-            data: values,
-            backgroundColor: 'rgba(54, 162, 235, 0.5)'
-          }]
-        }}
-        options={options}
-      />
+    <div className="multi-day-chart-wrapper">
+      {total > 0 && <div className="total-badge">总计: {total.toLocaleString()}</div>}
+      <div className="chart-panel">
+        <Bar
+          data={{
+            labels,
+            datasets: [{
+              label: '总消费数',
+              data: values,
+              backgroundColor: 'rgba(54, 162, 235, 0.5)'
+            }]
+          }}
+          options={options}
+        />
+      </div>
     </div>
   );
 }

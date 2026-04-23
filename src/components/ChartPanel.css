@@ -29,3 +29,20 @@
 .legend-valley {
   color: rgb(54, 162, 235);
 }
+
+.multi-day-chart-wrapper {
+  position: relative;
+}
+
+.total-badge {
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  background: rgba(54, 162, 235, 0.9);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 14px;
+  z-index: 10;
+}
