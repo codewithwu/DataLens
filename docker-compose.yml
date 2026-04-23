@@ -1,0 +1,9 @@
+services:
+  datalens:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: datalens
+    ports:
+      - "8080:80"
+    restart: unless-stopped
